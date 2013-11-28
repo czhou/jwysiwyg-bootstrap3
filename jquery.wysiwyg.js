@@ -231,7 +231,7 @@
 							}, this.options.resizeOptions));
 						}
 						
-						this.ui.toolbar.find(".btn:not(.code)").each(function () {
+						this.ui.toolbar.find(".btn:not(.toolbar-code)").each(function () {
 							var li = $(this);
 
 							if (li.hasClass("html")) {
@@ -241,7 +241,7 @@
 							}
 						});
 
-						this.ui.toolbar.find(".btn.code")
+						this.ui.toolbar.find(".btn.toolbar-code")
 							.removeClass('btn-primary')
 							.addClass('btn-default');
 					} else { //wysiwyg is shown
@@ -262,7 +262,7 @@
 							this.element.resizable("destroy");
 						}
 
-						this.ui.toolbar.find(".btn:not(.code)").each(function() {
+						this.ui.toolbar.find(".btn:not(.toolbar-code)").each(function() {
 							var li = $(this);
 
 							if (li.hasClass("html")) {
@@ -274,7 +274,7 @@
 							}
 						});
 
-						this.ui.toolbar.find(".btn.code")
+						this.ui.toolbar.find(".btn.toolbar-code")
 							.removeClass('btn-default')
 							.addClass('btn-primary');
 					}
@@ -826,7 +826,7 @@
 				tooltip = control.tooltip || control.command || name || "";
 
 			return $('<span class="btn btn-default" role="menuitem" unselectable="on"><i class="fa fa-' + className + '"></i></span>')
-				.addClass(className)
+				.addClass('toolbar-' + className)
 				.attr("title", tooltip)
 				.hover(this.addHoverClass, this.removeHoverClass)
 				.click(function (event) {
