@@ -4,11 +4,14 @@
  * Copyright © 2008–2009 Juan M Martinez, 2010–2013 Akzhan Abdulin and all contributors
  * https://github.com/jwysiwyg/jwysiwyg
  *
+ * Modifications for Bootstrap 3 and Font Awesome 4 by Alex Palaistras, © 2013
+ * https://github.com/thoughtmonster/jwysiwyg-bootstrap3
+ * 
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Release: 2013-11-27
+ * Original release: 2013-11-27
  *
  */
 /*jslint browser: true, forin: true, white: true */
@@ -83,6 +86,7 @@
 			},
 
 			createLink: {
+				className: "link",
 				groupIndex: 6,
 				visible: true,
 				exec: function () {
@@ -102,6 +106,7 @@
 			},
 			
 			unLink : {
+				className: "unlink",
 				groupIndex: 6,
 				visible: true,
 				exec : function() {
@@ -199,6 +204,7 @@
 			},
 
 			html: {
+				className: "code",
 				groupIndex: 10,
 				visible: false,
 				exec: function (preProcessor, postProcessor) {
@@ -225,7 +231,7 @@
 							}, this.options.resizeOptions));
 						}
 						
-						this.ui.toolbar.find("li").each(function () {
+						this.ui.toolbar.find(".btn:not(.code)").each(function () {
 							var li = $(this);
 
 							if (li.hasClass("html")) {
@@ -234,12 +240,15 @@
 								li.removeClass('disabled');
 							}
 						});
+
+						this.ui.toolbar.find(".btn.code")
+							.removeClass('btn-primary')
+							.addClass('btn-default');
 					} else { //wysiwyg is shown
 						this.saveContent(preProcessor);
 
 						$(this.original).css({
-							width:	this.editor.width(),
-							height: this.editor.height(),
+							height: this.editor.height() + 14, // 12px padding + 2px border
 							resize: "none"
 						}).show();
 						this.editor.hide();
@@ -253,7 +262,7 @@
 							this.element.resizable("destroy");
 						}
 
-						this.ui.toolbar.find("li").each(function() {
+						this.ui.toolbar.find(".btn:not(.code)").each(function() {
 							var li = $(this);
 
 							if (li.hasClass("html")) {
@@ -264,6 +273,10 @@
 								}
 							}
 						});
+
+						this.ui.toolbar.find(".btn.code")
+							.removeClass('btn-default')
+							.addClass('btn-primary');
 					}
 
 					this.viewHTML = !(this.viewHTML);
@@ -295,6 +308,7 @@
 			},
 
 			insertImage: {
+				className: "picture-o",
 				groupIndex: 6,
 				visible: true,
 				exec: function () {
@@ -315,6 +329,7 @@
 			},
 
 			insertOrderedList: {
+				className: "list",
 				groupIndex: 5,
 				visible: true,
 				tags: ["ol"],
@@ -322,6 +337,7 @@
 			},
 
 			insertTable: {
+				className: "table",
 				groupIndex: 6,
 				visible: true,
 				exec: function () {
@@ -342,6 +358,7 @@
 			},
 
 			insertUnorderedList: {
+				className: "list-ul",
 				groupIndex: 5,
 				visible: true,
 				tags: ["ul"],
@@ -360,6 +377,7 @@
 			},
 
 			justifyCenter: {
+				className: "align-center",
 				groupIndex: 1,
 				visible: true,
 				tags: ["center"],
@@ -370,6 +388,7 @@
 			},
 
 			justifyFull: {
+				className: "align-justify",
 				groupIndex: 1,
 				visible: true,
 				css: {
@@ -379,6 +398,7 @@
 			},
 
 			justifyLeft: {
+				className: "align-left",
 				visible: true,
 				groupIndex: 1,
 				css: {
@@ -388,6 +408,7 @@
 			},
 
 			justifyRight: {
+				className: "align-right",
 				groupIndex: 1,
 				visible: true,
 				css: {
@@ -435,12 +456,14 @@
 			},
 
 			redo: {
+				className: "repeat",
 				groupIndex: 4,
 				visible: true,
 				tooltip: "Redo"
 			},
 
 			removeFormat: {
+				className: "times",
 				groupIndex: 10,
 				visible: true,
 				exec: function () {
@@ -466,6 +489,7 @@
 			},
 
 			strikeThrough: {
+				className: "strikethrough",
 				groupIndex: 0,
 				visible: true,
 				tags: ["s", "strike"],
@@ -537,14 +561,14 @@
 
 
 		this.defaults = {
-html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" style="margin:0"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body style="margin:0;">INITIAL_CONTENT</body></html>',
+			html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" style="margin:0"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body style="margin:0;padding:0;">INITIAL_CONTENT</body></html>',
 			debug: false,
 			controls: {},
 			css: {},
 			events: {},
 			autoGrow: false,
 			autoSave: true,
-			brIE: false,					// http://code.google.com/p/jwysiwyg/issues/detail?id=15
+			brIE: false,				// http://code.google.com/p/jwysiwyg/issues/detail?id=15
 			formHeight: 270,
 			formWidth: 440,
 			iFrameClass: null,
@@ -554,7 +578,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			messages: {
 				nonSelection: "Select the text you wish to link"
 			},
-			toolbarHtml: '<ul role="menu" class="toolbar"></ul>',
+			toolbarHtml: '<div class="btn-toolbar" role="menu"></div>',
 			removeHeadings: false,
 			replaceDivWithP: false,
 			resizeOptions: false,
@@ -728,7 +752,6 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			var ui = this,
 				self = this.self,
 				controls = self.parseControls(),
-				hasVisibleControls	= true, // to prevent separator before first item
 				groups = [],
 				controlsByGroup = {},
 				i,
@@ -736,16 +759,10 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				iterateGroup = function (controlName, control) { //called for every group when adding
 					if (control.groupIndex && currentGroupIndex !== control.groupIndex) {
 						currentGroupIndex = control.groupIndex;
-						hasVisibleControls = false;
 					}
 
 					if (!control.visible) {
 						return;
-					}
-
-					if (!hasVisibleControls) {
-						ui.appendItemSeparator();
-						hasVisibleControls = true;
 					}
 
 					if (control.custom) {
@@ -798,6 +815,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			}
 
 			for (i = 0; i < groups.length; i += 1) {
+				self.ui.toolbar.append('<div class="btn-group"></div>');
 				$.each(controlsByGroup[groups[i]], iterateGroup);
 			}
 		};
@@ -807,7 +825,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				className = control.className || control.command || name || "empty",
 				tooltip = control.tooltip || control.command || name || "";
 
-			return $('<li role="menuitem" unselectable="on">' + className + "</li>")
+			return $('<span class="btn btn-default" role="menuitem" unselectable="on"><i class="fa fa-' + className + '"></i></span>')
 				.addClass(className)
 				.attr("title", tooltip)
 				.hover(this.addHoverClass, this.removeHoverClass)
@@ -835,7 +853,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 					self.ui.focus();
 					return true;
 				})
-				.appendTo(self.ui.toolbar);
+				.appendTo(self.ui.toolbar.children('.btn-group:last-child'));
 		};
 
 		this.ui.appendItemCustom = function (name, control) {
@@ -846,7 +864,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				$(window).bind("trigger-" + name + ".wysiwyg", control.callback);
 			}
 
-			return $('<li role="menuitem" unselectable="on" style="background: url(\'' + control.icon + '\') no-repeat;"></li>')
+			return $('<span class="btn btn-default btn-sm" role="menuitem" unselectable="on"><i class="fa fa-' + control.icon + '"></i></span>')
 				.addClass("custom-command-" + name)
 				.addClass("wysiwyg-custom-command")
 				.addClass(name)
@@ -867,11 +885,6 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 					return true;
 				})
 				.appendTo(self.ui.toolbar);
-		};
-
-		this.ui.appendItemSeparator = function () {
-			var self = this.self;
-			return $('<li role="separator" class="separator"></li>').appendTo(self.ui.toolbar);
 		};
 
 		this.autoSaveFunction = function () {
@@ -1327,14 +1340,13 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			}
 
 			this.editor = $(window.location.protocol === "https:" ? '<iframe src="javascript:false;"></iframe>' : "<iframe></iframe>").attr("frameborder", "0");
+			this.editor.addClass('form-control');
 
 			if (this.options.iFrameClass) {
 				this.editor.addClass(this.options.iFrameClass);
 			} else {
 				this.editor.css({
-					minHeight: (newY - 6).toString() + "px",
-					// fix for issue 12 ( http://github.com/akzhan/jwysiwyg/issues/issue/12 )
-					width: (newX > 50) ? newX.toString() + "px" : ""
+					minHeight: (newY - 6).toString() + "px"
 				});
 				if ($.browser.msie && parseInt($.browser.version, 10) < 7) {
 					this.editor.css("height", newY.toString() + "px");
@@ -1357,13 +1369,6 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			this.editor.attr("tabindex", $(element).attr("tabindex"));
 
 			this.element = $("<div/>").addClass("wysiwyg");
-
-			if (!this.options.iFrameClass) {
-				this.element.css({
-					width: (newX > 0) ? newX.toString() + "px" : "100%"
-				});
-			}
-
 			$(element).hide().before(this.element);
 
 			this.viewHTML = false;
@@ -1394,7 +1399,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				saveHandler,
 				toolbarWrapEl;
 
-			toolbarWrapEl = $('<div class="toolbar-wrap"><div style="clear: both"><!-- --></div>').prepend(self.ui.toolbar);
+			toolbarWrapEl = $('<div class="form-group"></div>').prepend(self.ui.toolbar);
 			self.ui.appendControls();
 			self.element.append(toolbarWrapEl)
 				.append(self.editor)
