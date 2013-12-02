@@ -853,16 +853,17 @@
 
 		this.ui.appendItemCustom = function (name, control) {
 			var self = this.self,
-				tooltip = control.tooltip || control.command || name || "";
+				tooltip = control.tooltip || control.command || name || "",
+				className = control.className || name;
 
 			if (control.callback) {
 				$(window).bind("trigger-" + name + ".wysiwyg", control.callback);
 			}
 
-			return $('<span class="btn btn-default btn-sm" role="menuitem" unselectable="on"><i class="fa fa-' + control.icon + '"></i></span>')
+			return $('<span class="btn btn-default btn-sm" role="menuitem" unselectable="on"><i class="fa fa-' + className + '"></i></span>')
 				.addClass("custom-command-" + name)
 				.addClass("wysiwyg-custom-command")
-				.addClass(name)
+				.addClass(className)
 				.attr("title", tooltip)
 				.hover(this.addHoverClass, this.removeHoverClass)
 				.click(function () {
@@ -1307,7 +1308,7 @@
 			self.editor.attr("scrolling", height < self.options.maxHeight ? "no" : "auto"); // hide scrollbar firefox
 			innerBody.css("overflow", height < self.options.maxHeight ? "hidden" : ""); // hide scrollbar chrome
 
-			self.editor.get(0).height = height;
+			self.editor.animate({height: height}, 200);
 
 			return self;
 		};
@@ -1335,7 +1336,8 @@
 			}
 
 			this.editor = $(window.location.protocol === "https:" ? '<iframe src="javascript:false;"></iframe>' : "<iframe></iframe>").attr("frameborder", "0");
-			this.editor.addClass('form-control');
+			this.editor.addClass('form-control')
+				.css('height', 'auto');
 
 			if (this.options.iFrameClass) {
 				this.editor.addClass(this.options.iFrameClass);
@@ -2348,7 +2350,7 @@
 		}
 	});
 
-	$(function () { // need access to jQuery UI stuff.
+	$(function () {
 		$.wysiwyg.dialog.register("bootstrap", function() {
 			var that = this;
 

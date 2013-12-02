@@ -20,16 +20,11 @@
 		version: "",
 		defaults: {
 			baseFile:		"jquery.wysiwyg.js",
-			css:			["jquery.wysiwyg.css", "jquery.wysiwyg.modal.css"],
 			cssPath:		"",
 			controlPath:	"controls/",
 			i18nPath:		"i18n/"
 		},
 		options: {},
-
-		css: function (names) {
-			$.autoload.css(names, this.options);
-		},
 
 		control: function (names, successCallback) {
 			$.autoload.js(names, {"baseFile": this.options.baseFile, "jsPath": this.options.controlPath, "successCallback": successCallback});
@@ -43,12 +38,6 @@
 			var i;
 
 			this.options = $.extend(true, this.defaults, Wysiwyg.options.plugins[this.name]);
-
-			if (this.options.css) {
-				for (i = 0; i < this.options.css.length; i += 1) {
-					this.css(this.options.css[i]);
-				}
-			}
 		},
 
 		lang: function (names, successCallback) {
