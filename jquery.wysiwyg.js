@@ -204,7 +204,7 @@
 			},
 
 			html: {
-				className: "code",
+				className: "eye",
 				groupIndex: 10,
 				visible: false,
 				exec: function (preProcessor, postProcessor) {
@@ -231,19 +231,15 @@
 							}, this.options.resizeOptions));
 						}
 						
-						this.ui.toolbar.find(".btn:not(.toolbar-code)").each(function () {
-							var li = $(this);
+						this.ui.toolbar.find(".btn").each(function () {
+							var btn = $(this);
 
-							if (li.hasClass("html")) {
-								li.removeClass("active");
+							if (btn.hasClass("toolbar-eye")) {
+								btn.removeClass("active");
 							} else {
-								li.removeClass('disabled');
+								btn.removeClass('disabled');
 							}
 						});
-
-						this.ui.toolbar.find(".btn.toolbar-code")
-							.removeClass('btn-primary')
-							.addClass('btn-default');
 					} else { //wysiwyg is shown
 						this.saveContent(preProcessor);
 
@@ -262,21 +258,17 @@
 							this.element.resizable("destroy");
 						}
 
-						this.ui.toolbar.find(".btn:not(.toolbar-code)").each(function() {
-							var li = $(this);
+						this.ui.toolbar.find(".btn").each(function() {
+							var btn = $(this);
 
-							if (li.hasClass("html")) {
-								li.addClass("active");
+							if (btn.hasClass("toolbar-eye")) {
+								btn.addClass("active");
 							} else {
-								if (false === li.hasClass("fullscreen")) {
-									li.removeClass("active").addClass('disabled');
+								if (false === btn.hasClass("fullscreen")) {
+									btn.removeClass("active").addClass('disabled');
 								}
 							}
 						});
-
-						this.ui.toolbar.find(".btn.toolbar-code")
-							.removeClass('btn-default')
-							.addClass('btn-primary');
 					}
 
 					this.viewHTML = !(this.viewHTML);
@@ -301,6 +293,7 @@
 			},
 
 			insertHorizontalRule: {
+				className: "minus",
 				groupIndex: 6,
 				visible: true,
 				tags: ["hr"],
@@ -561,7 +554,7 @@
 
 
 		this.defaults = {
-			html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" style="margin:0"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body style="margin:0;padding:0;">INITIAL_CONTENT</body></html>',
+			html: '<!DOCTYPE html"><html lang="en"><head><meta charset="utf-8"><style>html,body{margin:0}body{color:#555;font-size:14px;padding:0}p{margin:0 0 10px}</style></head><body>INITIAL_CONTENT</body></html>',
 			debug: false,
 			controls: {},
 			css: {},
@@ -603,7 +596,7 @@
 				}
 			},
 
-			dialog : "default"
+			dialog : "bootstrap"
 		};
 
 		//these properties are set from control hashes
@@ -818,6 +811,8 @@
 				self.ui.toolbar.append('<div class="btn-group"></div>');
 				$.each(controlsByGroup[groups[i]], iterateGroup);
 			}
+
+			self.ui.toolbar.find('.btn').tooltip({container: 'body', placement: 'bottom'});
 		};
 
 		this.ui.appendItem = function (name, control) {
@@ -825,7 +820,7 @@
 				className = control.className || control.command || name || "empty",
 				tooltip = control.tooltip || control.command || name || "";
 
-			return $('<span class="btn btn-default" role="menuitem" unselectable="on"><i class="fa fa-' + className + '"></i></span>')
+			return $('<span class="btn btn-default btn-sm" role="menuitem" unselectable="on"><i class="fa fa-' + className + '"></i></span>')
 				.addClass('toolbar-' + className)
 				.attr("title", tooltip)
 				.hover(this.addHoverClass, this.removeHoverClass)
@@ -2354,56 +2349,54 @@
 	});
 
 	$(function () { // need access to jQuery UI stuff.
-		if ($.ui) {
-			$.wysiwyg.dialog.register("jqueryui", function () {
-				var that = this;
+		$.wysiwyg.dialog.register("bootstrap", function() {
+			var that = this;
 
-				this._$dialog = null;
+			this._$dialog = null;
 
-				this.init = function() {
-					var content = this.options.content;
+			this.init = function() {
+				var content = this.options.content;
 
-					if (typeof content === 'object') {
-						if (typeof content.html === 'function') {
-							content = content.html();
-						} else if(typeof content.toString === 'function') {
-							content = content.toString();
-						}
+				if (typeof content === 'object') {
+					if (typeof content.html === 'function') {
+						content = content.html();
+					} else if(typeof content.toString === 'function') {
+						content = content.toString();
 					}
+				}
 
-					that._$dialog = $('<div></div>').attr('title', this.options.title).html(content);
+				that._$dialog = $('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
+				var $header = $('<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">' + this.options.title + '</h4></div>');
+				var $body = $('<div class="modal-body">' + content + '</div>');
 
-					var dialogHeight = this.options.height === 'auto' ? 300 : this.options.height,
-						dialogWidth = this.options.width === 'auto' ? 450 : this.options.width;
+				var dialogWidth  = this.options.width  === 'auto' ? 600 : this.options.width;
+				that._$dialog.find('.modal-dialog').css('width', dialogWidth);
+				that._$dialog.find('.modal-content').append($header).append($body);
 
-					// console.log(that._$dialog);
-					
-					that._$dialog.dialog({
-						modal: this.options.modal,
-						draggable: this.options.draggable,
-						height: dialogHeight,
-						width: dialogWidth
-					});
+				that._$dialog.modal();
 
-					return that._$dialog;
-				};
+				that._$dialog.on('hidden.bs.modal', function () {
+					that._$dialog.remove();
+				});
 
-				this.show = function () {
-					that._$dialog.dialog("open");
-					return that._$dialog;
-				};
+				return that._$dialog;
+			};
 
-				this.hide = function () {
-					that._$dialog.dialog("close");
-					return that._$dialog;
-				};
+			this.show = function() {
+				that._$dialog.modal("show");
+				return that._$dialog;
+			};
 
-				this.destroy = function() {
-					that._$dialog.dialog("destroy");
-					return that._$dialog;
-				};
-			});
-		}
+			this.hide = function() {
+				that._$dialog.modal("hide");
+				return that._$dialog;
+			};
+
+			this.destroy = function() {
+				that._$dialog.modal("hide");
+				return that._$dialog;
+			};
+		});
 
 		$.wysiwyg.dialog.register("default", function () {
 			var that = this;
@@ -2464,7 +2457,7 @@
 				}
 				
 				// Draggable feature:
-				if (this.options.draggable) { 
+				if (this.options.draggable) {
 					
 					var mouseDown = false;
 					
@@ -2509,12 +2502,12 @@
 			this.destroy = function() {
 			
 				// Modal feature:
-				if (this.options.modal) { 
+				if (this.options.modal) {
 					that._$dialog.unwrap();
 				}
 				
 				// Draggable feature:
-				if (this.options.draggable) { 
+				if (this.options.draggable) {
 					that._$dialog.find("div.wysiwyg-dialog-topbar").unbind("mousedown");
 				}
 				
@@ -2524,8 +2517,6 @@
 		});
 	});
 	// end Dialog
-
-
 
 	$.fn.wysiwyg = function (method) {
 		var args = arguments, plugin;

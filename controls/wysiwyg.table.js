@@ -55,11 +55,11 @@
 			reset: "Cancel"
 		};
 
-		formTableHtml = '<form class="wysiwyg" id="wysiwyg-tableInsert"><fieldset><legend>{legend}</legend>' +
-			'<label>{cols}: <input type="text" name="colCount" value="3" /></label><br/>' +
-			'<label>{rows}: <input type="text" name="rowCount" value="3" /></label><br/>' +
-			'<input type="submit" class="button" value="{submit}"/> ' +
-			'<input type="reset" value="{reset}"/></fieldset></form>';
+		formTableHtml = '<form class="wysiwyg form-horizontal" id="wysiwyg-tableInsert">' +
+			'<div class="form-group"><label class="col-sm-4 control-label">{cols}:</label><div class="col-sm-8"><input type="text" name="colCount" value="3" class="form-control"></div></div>' +
+			'<div class="form-group"><label class="col-sm-4 control-label">{rows}:</label><div class="col-sm-8"><input type="text" name="rowCount" value="3" class="form-control"></div></div>' +
+			'<div class="form-group"><label class="col-sm-4 control-label"></label><div class="col-sm-8"><input type="submit" value="{submit}" class="btn btn-primary"> ' +
+			'<input type="reset" value="{reset}" class="btn btn-default"></div></div></form>';
 		
 		for (key in dialogReplacements) {
 			if ($.wysiwyg.i18n) {

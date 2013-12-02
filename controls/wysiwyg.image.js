@@ -30,7 +30,7 @@
 				img = {
 					alt: "",
 					self: Wysiwyg.dom ? Wysiwyg.dom.getElement("img") : null, // link to element node
-					src: "http://",
+					src: "",
 					title: ""
 				};
 
@@ -42,7 +42,7 @@
 				description : "Description",
 				width   : "Width",
 				height  : "Height",
-				original : "Original W x H",
+				original : "Original W &times; H",
 				"float"	: "Float",
 				floatNone : "None",
 				floatLeft : "Left",
@@ -52,9 +52,9 @@
 				fileManagerIcon : "Select file from server"
 			};
 
-			formImageHtml = '<form class="wysiwyg" id="wysiwyg-addImage"><fieldset>' +
-				'<div class="form-row"><span class="form-row-key">{preview}:</span><div class="form-row-value"><img src="" alt="{preview}" style="margin: 2px; padding:5px; max-width: 100%; overflow:hidden; max-height: 100px; border: 1px solid rgb(192, 192, 192);"/></div></div>' +
-				'<div class="form-row"><label for="name">{url}:</label><div class="form-row-value"><input type="text" name="src" value=""/>';
+			formImageHtml = '<form class="wysiwyg form-horizontal id="wysiwyg-addImage">' +
+				'<div class="form-group"><span class="col-sm-4 control-label" style="font-weight:bold">{preview}:</span><div class="col-sm-8"><img src="" alt="{preview}" class="img-thumbnail" style="max-height:100px;max-width:100%"></div></div>' +
+				'<div class="form-group"><label class="col-sm-4 control-label">{url}:</label><div class="col-sm-8"><input type="text" name="src" value="" class="form-control">';
 
 			if ($.wysiwyg.fileManager && $.wysiwyg.fileManager.ready) {
 				// Add the File Manager icon:
@@ -62,17 +62,20 @@
 			}
 
 			formImageHtml += '</div></div>' +
-				'<div class="form-row"><label for="name">{title}:</label><div class="form-row-value"><input type="text" name="imgtitle" value=""/></div></div>' +
-				'<div class="form-row"><label for="name">{description}:</label><div class="form-row-value"><input type="text" name="description" value=""/></div></div>' +
-				'<div class="form-row"><label for="name">{width} x {height}:</label><div class="form-row-value"><input type="text" name="width" value="" class="width-small"/> x <input type="text" name="height" value="" class="width-small"/></div></div>' +
-				'<div class="form-row"><label for="name">{original}:</label><div class="form-row-value"><input type="text" name="naturalWidth" value="" class="width-small" disabled="disabled"/> x ' +
-				'<input type="text" name="naturalHeight" value="" class="width-small" disabled="disabled"/></div></div>' +
-				'<div class="form-row"><label for="name">{float}:</label><div class="form-row-value"><select name="float">' +
+				'<div class="form-group"><label class="col-sm-4 control-label">{title}:</label><div class="col-sm-8"><input type="text" name="imgtitle" value="" class="form-control"></div></div>' +
+				'<div class="form-group"><label class="col-sm-4 control-label">{description}:</label><div class="col-sm-8"><input type="text" name="description" value="" class="form-control"></div></div>' +
+				'<div class="form-group"><label class="col-sm-4 control-label">{width} &times; {height}:</label><div class="col-sm-8"><div class="row">' +
+				'<div class="col-sm-5"><input type="text" name="width" value="" class="form-control"></div><div class="col-sm-2" style="font-size:22px;text-align:center">&times;</div>' +
+				'<div class="col-sm-5"><input type="text" name="height" value="" class="form-control"></div></div></div></div>' +
+				'<div class="form-group"><label class="col-sm-4 control-label">{original}:</label><div class="col-sm-8"><div class="row"><div class="col-sm-5">' +
+				'<input type="text" name="naturalWidth" value="" class="form-control" disabled="disabled"></div><div class="col-sm-2" style="font-size:22px;text-align:center">&times;</div>' +
+				'<div class="col-sm-5"><input type="text" name="naturalHeight" value="" class="form-control" disabled="disabled"></div></div></div></div>' +
+				'<div class="form-group"><label class="col-sm-4 control-label">{float}:</label><div class="col-sm-8"><select name="float" class="form-control">' +
 				'<option value="">{floatNone}</option>' +
 				'<option value="left">{floatLeft}</option>' +
 				'<option value="right">{floatRight}</option></select></div></div>' +
-				'<div class="form-row form-row-last"><label for="name"></label><div class="form-row-value"><input type="submit" class="button" value="{submit}"/> ' +
-				'<input type="reset" value="{reset}"/></div></div></fieldset></form>';
+				'<div class="form-group"><label class="col-sm-4 control-label"></label><div class="col-sm-8"><input type="submit" class="btn btn-primary" value="{submit}"> ' +
+				'<input type="reset" value="{reset}" class="btn btn-default"></div></div></form>';
 
 			for (key in dialogReplacements) {
 				if ($.wysiwyg.i18n) {
